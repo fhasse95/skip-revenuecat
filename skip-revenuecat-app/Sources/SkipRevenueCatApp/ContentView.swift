@@ -67,15 +67,16 @@ public struct ContentView: View {
             }
             #if SKIP
             .sheet(isPresented: $debugOverlayVisible) {
+                Text("TODO")
                 // Debug view is not available in KMP. Android native library is used
-                ComposeView { context in
+//                ComposeView { context in
                     // DebugRevenueCatBottomSheet crashes with an error
                     // rememberModalBottomSheetState is unavailable
-                    DebugRevenueCatScreen(
-                        onPurchaseCompleted: { _ in  },
-                        onPurchaseErrored: { _ in }
-                    )
-                }
+//                    DebugRevenueCatScreen(
+//                        onPurchaseCompleted: { _ in },
+//                        onPurchaseErrored: { _ in }
+//                    )
+//                }
             }
             #elseif !SKIP && os(iOS)
             // Debug view is not available in KMP. iOS native library is used
