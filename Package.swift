@@ -11,15 +11,17 @@ let package = Package(
     defaultLocalization: "en",
     platforms: [.iOS(.v16), .macOS(.v13)],
     products: [
-        .library(name: "SkipRevenueCat", targets: [
-            "SkipRevenueCat",
-            "SkipRevenueCatLibrary"
-        ]),
+        .library(
+            name: "SkipRevenueCat",
+            targets: [
+                "SkipRevenueCat",
+                "SkipRevenueCatLibrary",
+            ])
     ],
     dependencies: [
-        .package(url: "https://source.skip.tools/skip.git", from: "1.4.1"),
-        .package(url: "https://source.skip.tools/skip-foundation.git", from: "1.3.3"),
-        .package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", exact: "13.26.1")
+        .package(url: "https://source.skip.tools/skip.git", exact: "1.6.5"),
+        .package(url: "https://source.skip.tools/skip-foundation.git", exact: "1.3.8"),
+        .package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", exact: "15.0.0"),
     ],
     targets: [
         .target(
@@ -28,33 +30,33 @@ let package = Package(
                 .product(name: "SkipFoundation", package: "skip-foundation"),
                 .product(name: "PurchasesHybridCommon", package: "purchases-hybrid-common"),
                 .product(name: "PurchasesHybridCommonUI", package: "purchases-hybrid-common"),
-                "SkipRevenueCatLibrary"
+                "SkipRevenueCatLibrary",
             ],
             exclude: [
                 "../../skip-revenuecat-library/",
-                "../../skip-revenuecat-app/"
+                "../../skip-revenuecat-app/",
             ],
-            resources: [.process("Resources")],
+            resources: [],
             plugins: [.plugin(name: "skipstone", package: "skip")]
         ),
-        // .binaryTarget(
-        //     name: "SkipRevenueCatLibrary",
-        //     path: "./skip-revenuecat-library/skip-revenuecat-library/build/XCFrameworks/release/SkipRevenueCatLibrary.xcframework"
-        // ),
-       .binaryTarget(
-           name: "SkipRevenueCatLibrary",
-           url: "https://github.com/aduryagin/skip-revenuecat/releases/download/0.0.12/SkipRevenueCatLibrary.xcframework.zip",
-           checksum: "b75b7b35204e3797ee26664b26074fe9e8c9fe36a8c571e3f4c07b23d868bed4"
-       ),
-        
+        //  .binaryTarget(
+        //      name: "SkipRevenueCatLibrary",
+        //      path: "./skip-revenuecat-library/skip-revenuecat-library/build/XCFrameworks/release/SkipRevenueCatLibrary.xcframework"
+        //  ),
+        .binaryTarget(
+            name: "SkipRevenueCatLibrary",
+            url:
+                "https://github.com/aduryagin/skip-revenuecat/releases/download/0.0.13/SkipRevenueCatLibrary.xcframework.zip",
+            checksum: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        ),
         .testTarget(
             name: "SkipRevenueCatTests",
             dependencies: [
                 "SkipRevenueCat",
-                .product(name: "SkipTest", package: "skip")
+                .product(name: "SkipTest", package: "skip"),
             ],
             resources: [.process("Resources")],
             plugins: [.plugin(name: "skipstone", package: "skip")]
-        )
+        ),
     ]
 )
