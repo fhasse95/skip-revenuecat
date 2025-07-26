@@ -8,7 +8,7 @@ Documentation https://github.com/RevenueCat/purchases-kmp
 ```swift
 dependencies: [
     // Other dependencies here
-    .package(url: "https://github.com/aduryagin/skip-revenuecat.git", from: "0.0.12"),
+    .package(url: "https://github.com/aduryagin/skip-revenuecat.git", from: "0.0.13"),
 ],
 targets: [
     .target(
