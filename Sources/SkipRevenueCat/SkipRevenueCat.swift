@@ -4,73 +4,10 @@
 
 // Skip transpiles this to: import multi.platform.library.*
 
-#if os(macOS)
-// MacOS is not currently supported in KMP
-// https://github.com/RevenueCat/purchases-kmp/tree/main?tab=readme-ov-file#requirements
-@_exported import RevenueCat
-@_exported import RevenueCatUI
-
-public typealias PurchasesError = Error
-public extension Purchases {
-    static var sharedInstance: Purchases {
-        RevenueCat.Purchases.shared
-    }
-}
-public typealias KotlinBoolean = Bool
-public typealias KotlinUnit = Void
-#endif
-
-#if os(iOS)
-@_exported import SkipRevenueCatLibrary
-import PurchasesHybridCommon
-import PurchasesHybridCommonUI
-
-public typealias CustomerInfo = ModelsCustomerInfo
-public typealias Offerings = ModelsOfferings
-public typealias StoreProduct = ModelsStoreProduct
-public typealias PurchasesError = ModelsPurchasesError
-public typealias StoreTransaction = ModelsStoreTransaction
-
-public extension LogLevel {
-    static var DEBUG: LogLevel {
-        return .debug
-    }
-    static var ERROR: LogLevel {
-        return .error
-    }
-    static var INFO: LogLevel {
-        return .info
-    }
-    static var VERBOSE: LogLevel {
-        return .verbose
-    }
-    static var WARN: LogLevel {
-        return .warn
-    }
-}
-
-public extension Purchases {
-    static var isConfigured: Bool {
-        Purchases.companion.isConfigured
-    }
-    
-    static var sharedInstance: Purchases {
-        Purchases.companion.sharedInstance
-    }
-    
-    static var logLevel: LogLevel {
-        get {
-            Purchases.companion.logLevel
-        }
-        
-        set {
-            Purchases.companion.logLevel = newValue
-        }
-    }
-}
-#elseif SKIP
+#if SKIP
 import com.revenuecat.purchases.kmp.__
-// I cannot re-export packages here, so I use typealiases
+
+// I cannot re-export packages here, so I use typealiases.
 public typealias Purchases = com.revenuecat.purchases.kmp.Purchases
 public typealias CustomerInfo = com.revenuecat.purchases.kmp.models.CustomerInfo
 public typealias Offerings = com.revenuecat.purchases.kmp.models.Offerings
@@ -81,17 +18,30 @@ public typealias StoreTransaction = com.revenuecat.purchases.kmp.models.StoreTra
 public typealias KotlinBoolean = Bool
 public typealias KotlinUnit = Unit
 public typealias LogLevel = com.revenuecat.purchases.kmp.LogLevel
-#endif
 
-#if os(iOS) || SKIP
 public extension Purchases {
-    static func configure(apiKey: String, builder: @escaping (PurchasesConfiguration.Builder) -> Void = {_ in }) {
-        #if !SKIP
-        Purchases.companion.configure(apiKey: apiKey, builder: builder)
-        #else
+    static func configure(apiKey: String, builder: @escaping (PurchasesConfiguration.Builder) -> Void = { _ in }) {
         Purchases.configure(PurchasesConfiguration(apiKey: apiKey, builder: builder))
         Void
-        #endif
+    }
+}
+#else
+@_exported import RevenueCat
+@_exported import RevenueCatUI
+
+public typealias PurchasesError = Error
+public typealias KotlinBoolean = Bool
+public typealias KotlinUnit = Void
+
+public extension Purchases {
+    static var sharedInstance: Purchases {
+        Purchases.shared
+    }
+
+    static func configure(apiKey: String, builder: @escaping (Configuration.Builder) -> Void = { _ in }) {
+        let configurationBuilder = Configuration.Builder(withAPIKey: apiKey)
+        builder(configurationBuilder)
+        Purchases.configure(with: configurationBuilder)
     }
 }
 #endif

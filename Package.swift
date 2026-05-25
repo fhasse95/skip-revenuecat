@@ -9,28 +9,26 @@ import PackageDescription
 let package = Package(
     name: "skip-revenuecat",
     defaultLocalization: "en",
-    platforms: [.iOS(.v16), .macOS(.v13)],
+    platforms: [.iOS(.v16), .macCatalyst(.v16), .macOS(.v13)],
     products: [
         .library(
             name: "SkipRevenueCat",
             targets: [
                 "SkipRevenueCat",
-                "SkipRevenueCatLibrary",
             ])
     ],
     dependencies: [
         .package(url: "https://source.skip.tools/skip.git", from: "1.6.30"),
         .package(url: "https://source.skip.tools/skip-foundation.git", from: "1.3.9"),
-        .package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", from: "15.0.0"),
+        .package(url: "https://github.com/RevenueCat/purchases-ios-spm.git", exact: "5.33.0"),
     ],
     targets: [
         .target(
             name: "SkipRevenueCat",
             dependencies: [
                 .product(name: "SkipFoundation", package: "skip-foundation"),
-                .product(name: "PurchasesHybridCommon", package: "purchases-hybrid-common"),
-                .product(name: "PurchasesHybridCommonUI", package: "purchases-hybrid-common"),
-                "SkipRevenueCatLibrary",
+                .product(name: "RevenueCat", package: "purchases-ios-spm"),
+                .product(name: "RevenueCatUI", package: "purchases-ios-spm"),
             ],
             exclude: [
                 "../../skip-revenuecat-library/",
@@ -38,16 +36,6 @@ let package = Package(
             ],
             resources: [],
             plugins: [.plugin(name: "skipstone", package: "skip")]
-        ),
-        //  .binaryTarget(
-        //      name: "SkipRevenueCatLibrary",
-        //      path: "./skip-revenuecat-library/skip-revenuecat-library/build/XCFrameworks/release/SkipRevenueCatLibrary.xcframework"
-        //  ),
-        .binaryTarget(
-            name: "SkipRevenueCatLibrary",
-            url:
-                "https://github.com/aduryagin/skip-revenuecat/releases/download/0.0.14/SkipRevenueCatLibrary.xcframework.zip",
-            checksum: "4573ad749415f6422031b3320495f691753fd6f6c0903c52fc79d1a792ff9680"
         ),
         .testTarget(
             name: "SkipRevenueCatTests",
